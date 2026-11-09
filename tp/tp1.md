@@ -83,10 +83,6 @@ Les éléments suivants ne sont pas justifiés dans le périmètre initial :
 
 **Justification :** Le projet concerne uniquement la dématérialisation et la gestion des demandes de congés du personnel.
 
-## Conclusion
-
-L'analyse du besoin client permet d'identifier les fonctionnalités principales du système, les contraintes et les règles métier. Cependant, plusieurs informations restent à clarifier, notamment les délais de dépôt, le calcul des soldes, le nombre maximal d'absences simultanées et les conditions d'annulation. Ces points devront être discutés avec le client afin de définir des exigences précises et adaptées à ses besoins.
-
 # Partie 3 — — Premières exigences
 
 ## Exigences fonctionnelles
