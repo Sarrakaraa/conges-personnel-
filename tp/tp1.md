@@ -22,11 +22,6 @@ Source : « Aujourd'hui, les demandes sur papier se perdent et personne ne conna
 - Direction générale : non mentionnée dans la demande.
 - Service informatique / paie : exploitation, maintenance, sécurité. À présenter comme hypothèse.
 
-**Points ouverts :** (FOR SARRA & NOUR)
-
-- La demande ne précise pas la répartition des tâches entre la gestionnaire et la directrice RH.
-- Les responsables d'équipe font aussi partie des 60 salariés : qui valide leurs propres demandes de congés ?
-
 ### Q3 — Objectifs SMART (sans valeurs inventées)
 
 - OBJ-01 : Centraliser [proportion à valider] des demandes de congés dans le nouveau système dans un délai de [à valider] après la mise en service.
@@ -41,7 +36,7 @@ Source : « Aujourd'hui, les demandes sur papier se perdent et personne ne conna
 
 - OBJ-06 : Augmenter la proportion de demandes déposées dans le délai de préavis [à valider], de [valeur actuelle à mesurer] à [valeur cible à valider], sur [période à valider].
 
-### Q4 — Objectif difficile à mesurer (FOR SARRA & NOUR)
+### Q4 — Objectif difficile à mesurer 
 
 « Les salariés veulent une réponse immédiate » est difficile à mesurer. « Immédiate » est subjectif : instantanée, quelques minutes ou quelques heures ? Elle contredit aussi la validation manuelle par le responsable. Il faut définir avec le client un indicateur (délai maximum de réponse) et une cible : [à valider].
 
