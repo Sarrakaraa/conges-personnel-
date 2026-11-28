@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  title: Demandes de congés du personnel
+  version: 1.0.0
+paths:
+  /demandes-conge:
+    post:
+      summary: Soumettre une demande de congé annuel (US-01)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DemandeCongeCreation"
+      responses:
+        "201":
+          description: Demande créée, acceptée automatiquement (2 jours ouvrables ou moins) ou en attente de la décision du responsable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemandeConge"
+        "400":
+          description: Demande refusée par une règle (dates invalides, fin avant début, premier jour de congé dans moins de 7 jours)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "401":
+          description: Utilisateur non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "403":
+          description: Salarié hors périmètre de la version 1 (contrat ni CDI ni CDD)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "409":
+          description: Conflit avec l'état actuel (solde insuffisant, limite d'absents de l'équipe atteinte, salarié sous blocage de 30 jours)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+  /salaries/{salarieId}/solde:
+    get:
+      summary: Consulter mon solde de congés (US-02)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: salarieId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: E01
+      responses:
+        "200":
+          description: Solde de congés du salarié
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Solde"
+        "401":
+          description: Utilisateur non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "403":
+          description: Accès non autorisé (le solde d'un autre salarié)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+  /demandes-conge/{id}/refus:
+    post:
+      summary: Refuser une demande avec un motif (US-09)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 42
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefusDemande"
+      responses:
+        "200":
+          description: Demande refusée, motif enregistré
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemandeConge"
+        "400":
+          description: Refus impossible (motif absent ou vide)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "401":
+          description: Utilisateur non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "403":
+          description: Le responsable n'est pas celui de l'équipe du salarié
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+        "409":
+          description: Demande déjà traitée (acceptée, refusée ou annulée)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Erreur"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    DemandeCongeCreation:
+      type: object
+      required: [dateDebut, dateFin]
+      properties:
+        dateDebut:
+          type: string
+          format: date
+          example: "2026-12-21"
+        dateFin:
+          type: string
+          format: date
+          example: "2026-12-23"
+    DemandeConge:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 42
+        salarie:
+          type: string
+          example: E01
+        dateDebut:
+          type: string
+          format: date
+          example: "2026-12-21"
+        dateFin:
+          type: string
+          format: date
+          example: "2026-12-23"
+        joursOuvrables:
+          type: integer
+          example: 3
+        statut:
+          type: string
+          enum: [en attente, acceptée, refusée, annulée]
+          example: en attente
+        motifRefus:
+          type: string
+          example: Période de forte activité pour l'équipe.
+    Solde:
+      type: object
+      properties:
+        soldeInitial:
+          type: integer
+          example: 26
+        joursReserves:
+          type: integer
+          example: 7
+        joursDisponibles:
+          type: integer
+          example: 19
+    RefusDemande:
+      type: object
+      required: [motif]
+      properties:
+        motif:
+          type: string
+          example: Période de forte activité pour l'équipe.
+    Erreur:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Le premier jour de congé doit être au moins 7 jours après le dépôt.
